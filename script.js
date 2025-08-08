@@ -1,177 +1,241 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const languageButtons = document.querySelectorAll('.lang-switch button');
-  const allSections = document.querySelectorAll('.section');
-  const nameSelect = document.getElementById('name');
-  const positionSelect = document.getElementById('position');
-  const form = document.getElementById('checklist-form');
-  const dateInput = document.getElementById('date');
-  const commentBlocks = document.querySelectorAll('.comment-block textarea');
-
-  // Установка сегодняшней даты
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
-
-  const checklistData = {
-    barista: [/* ... */],
-    waiter: [/* ... */],
-    cashier: [/* ... */]
-  };
-
-  const names = {
-    barista: ['Alice', 'Bob'],
-    waiter: ['Charlie', 'Dana'],
-    cashier: ['Eve', 'Frank']
-  };
+document.addEventListener("DOMContentLoaded", function () {
+  const langButtons = document.querySelectorAll(".lang-switch button");
+  const allSections = document.querySelectorAll("section");
+  const selects = document.querySelectorAll("select");
+  const nameSelect = document.getElementById("name");
+  const positionSelect = document.getElementById("position");
+  const dateInput = document.getElementById("date");
+  const commentBlocks = document.querySelectorAll(".comment-block textarea");
+  const form = document.querySelector("form");
 
   const translations = {
-    done: { ru: 'Сделано', en: 'Done', vi: 'Hoàn thành' },
-    not_done: { ru: 'Не сделано', en: 'Not done', vi: 'Chưa làm' },
-    dash: { ru: '—', en: '—', vi: '—' }
+    en: {
+      nameLabel: "Name",
+      positionLabel: "Position",
+      dateLabel: "Date",
+      sendButton: "Send",
+      defaultOption: "—",
+      done: "Done",
+      notDone: "Not done",
+      positions: {
+        waiter: "Waiter",
+        barista: "Barista",
+        cashier: "Cashier"
+      }
+    },
+    ru: {
+      nameLabel: "Имя",
+      positionLabel: "Должность",
+      dateLabel: "Дата",
+      sendButton: "Отправить",
+      defaultOption: "—",
+      done: "Сделано",
+      notDone: "Не сделано",
+      positions: {
+        waiter: "Официант",
+        barista: "Бариста",
+        cashier: "Кассир"
+      }
+    },
+    vi: {
+      nameLabel: "Tên",
+      positionLabel: "Chức vụ",
+      dateLabel: "Ngày",
+      sendButton: "Gửi",
+      defaultOption: "—",
+      done: "Hoàn thành",
+      notDone: "Chưa hoàn thành",
+      positions: {
+        waiter: "Phục vụ",
+        barista: "Barista",
+        cashier: "Thu ngân"
+      }
+    }
   };
 
-  const positionTranslations = {
-    barista: { ru: "Бариста", en: "Barista", vi: "Barista" },
-    waiter: { ru: "Официант", en: "Waiter", vi: "Phục vụ" },
-    cashier: { ru: "Кассир", en: "Cashier", vi: "Thu ngân" },
-    order: { ru: "Заказ", en: "Order", vi: "Đơn hàng" },
-    "select-placeholder": { ru: "—", en: "—", vi: "—" }
-  };
+  let currentLang = document.documentElement.lang || "en";
 
-  // Смена языка
   function switchLanguage(lang) {
-    document.documentElement.setAttribute('lang', lang);
+    currentLang = lang;
+    document.documentElement.lang = lang;
 
-    // Обновляем option'ы всех селекторов
-    document.querySelectorAll('select.qty').forEach(select => {
-      const currentValue = select.value;
-      select.innerHTML = '';
-      const dashOption = document.createElement('option');
-      dashOption.value = '';
-      dashOption.textContent = translations.dash[lang];
-      select.appendChild(dashOption);
+    const t = translations[lang];
 
-      const doneOption = document.createElement('option');
-      doneOption.value = 'done';
-      doneOption.textContent = translations.done[lang];
-      select.appendChild(doneOption);
+    // Обновление лейблов
+    document.querySelector("label[for='name']").textContent = t.nameLabel;
+    document.querySelector("label[for='position']").textContent = t.positionLabel;
+    document.querySelector("label[for='date']").textContent = t.dateLabel;
+    document.querySelector("button[type='submit']").textContent = t.sendButton;
 
-      const notDoneOption = document.createElement('option');
-      notDoneOption.value = 'not_done';
-      notDoneOption.textContent = translations.not_done[lang];
-      select.appendChild(notDoneOption);
-
-      select.value = currentValue;
+    // Обновление селектора должностей
+    Array.from(positionSelect.options).forEach(option => {
+      if (option.value && t.positions[option.value]) {
+        option.textContent = t.positions[option.value];
+      }
+      if (option.value === "") {
+        option.textContent = t.defaultOption;
+      }
     });
 
-    // Обновляем option'ы должности (position)
-    document.querySelectorAll('#position option[data-key]').forEach(opt => {
-      const key = opt.dataset.key;
-      if (positionTranslations[key] && positionTranslations[key][lang]) {
-        opt.textContent = positionTranslations[key][lang];
+    // Обновление всех select.qty
+    document.querySelectorAll("select.qty").forEach(select => {
+      Array.from(select.options).forEach(option => {
+        if (option.value === "done") option.textContent = t.done;
+        else if (option.value === "not_done") option.textContent = t.notDone;
+        else if (option.value === "") option.textContent = t.defaultOption;
+      });
+    });
+  }
+
+  // Смена языка при клике на кнопки
+  langButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      switchLanguage(button.getAttribute("data-lang"));
+    });
+  });
+
+  // Установка текущей даты
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const year = today.getFullYear();
+  dateInput.value = `${year}-${month}-${day}`;
+
+  // Автосохранение
+  function saveForm() {
+    const data = {
+      name: nameSelect.value,
+      position: positionSelect.value,
+      date: dateInput.value,
+      checklist: {},
+      comments: {}
+    };
+
+    allSections.forEach(section => {
+      const sectionId = section.id;
+      const items = section.querySelectorAll(".check-item");
+      data.checklist[sectionId] = {};
+      items.forEach(item => {
+        const select = item.querySelector("select.qty");
+        data.checklist[sectionId][select.name] = select.value;
+      });
+
+      const comment = section.querySelector("textarea");
+      if (comment) {
+        data.comments[sectionId] = comment.value;
+      }
+    });
+
+    localStorage.setItem("checklistData", JSON.stringify(data));
+  }
+
+  function loadForm() {
+    const data = JSON.parse(localStorage.getItem("checklistData"));
+    if (!data) return;
+
+    nameSelect.value = data.name || "";
+    positionSelect.value = data.position || "";
+    dateInput.value = data.date || "";
+
+    allSections.forEach(section => {
+      const sectionId = section.id;
+      const items = section.querySelectorAll(".check-item");
+
+      if (data.checklist && data.checklist[sectionId]) {
+        items.forEach(item => {
+          const select = item.querySelector("select.qty");
+          const value = data.checklist[sectionId][select.name];
+          if (value !== undefined) {
+            select.value = value;
+          }
+        });
+      }
+
+      const comment = section.querySelector("textarea");
+      if (comment && data.comments && data.comments[sectionId]) {
+        comment.value = data.comments[sectionId];
       }
     });
   }
 
-  languageButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const lang = btn.getAttribute('data-lang');
-      switchLanguage(lang);
-    });
-  });
-
-  positionSelect.addEventListener('change', () => {
-    const role = positionSelect.value;
-    nameSelect.innerHTML = '<option value="">—</option>';
-    if (names[role]) {
-      names[role].forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        opt.textContent = name;
-        nameSelect.appendChild(opt);
-      });
-    }
-
-    allSections.forEach(section => {
-      if (section.dataset.role === role) {
-        section.style.display = 'block';
-      } else {
-        section.style.display = 'none';
-      }
-    });
-  });
-
-  // Автосохранение
-  const autosaveFields = ['name', 'position', 'date'];
-  autosaveFields.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      const saved = localStorage.getItem(id);
-      if (saved) el.value = saved;
-      el.addEventListener('change', () => localStorage.setItem(id, el.value));
-    }
-  });
-
-  // Чеклисты и комментарии
-  document.querySelectorAll('select.qty').forEach(select => {
-    const saved = localStorage.getItem(select.name);
-    if (saved) select.value = saved;
-    select.addEventListener('change', () => localStorage.setItem(select.name, select.value));
-  });
-
-  commentBlocks.forEach(area => {
-    const saved = localStorage.getItem(area.name);
-    if (saved) area.value = saved;
-    area.addEventListener('input', () => localStorage.setItem(area.name, area.value));
-  });
-
-  // Отправка
-  form.addEventListener('submit', async (e) => {
+  // Отправка в Telegram
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const name = nameSelect.value || '—';
-    const role = positionSelect.value || '—';
-    const date = dateInput.value || '—';
+    const name = nameSelect.value || "—";
+    const position = translations["en"].positions[positionSelect.value] || "—";
+    const date = dateInput.value || "—";
 
-    const result = [`Name: ${name}`, `Position: ${role}`, `Date: ${date}`];
+    const messageLangs = {
+      ru: [],
+      en: []
+    };
 
-    document.querySelectorAll('.section').forEach(section => {
-      const roleSection = section.dataset.role;
-      if (roleSection !== role) return;
+    ["ru", "en"].forEach(lang => {
+      const t = translations[lang];
 
-      const sectionTitle = section.querySelector('h3')?.textContent || '';
-      result.push(`\n${sectionTitle}`);
+      let message = `🧾 <b>${t.nameLabel}:</b> ${name}\n`;
+      message += `<b>${t.positionLabel}:</b> ${t.positions[positionSelect.value] || "—"}\n`;
+      message += `<b>${t.dateLabel}:</b> ${date}\n\n`;
 
-      section.querySelectorAll('label.check-label').forEach(label => {
-        const select = label.querySelector('select.qty');
-        const value = select?.value || '';
-        const labelText = label.childNodes[0].textContent.trim();
-        let displayText = '—';
-        if (value === 'done') displayText = 'Done';
-        if (value === 'not_done') displayText = 'Not done';
-        result.push(`• ${labelText}: ${displayText}`);
+      allSections.forEach(section => {
+        const sectionTitle = section.querySelector("h3").textContent.trim();
+        message += `📍 <u>${sectionTitle}</u>\n`;
+
+        const items = section.querySelectorAll(".check-item");
+        items.forEach(item => {
+          const label = item.querySelector("label").textContent.trim();
+          const select = item.querySelector("select.qty");
+          const value = select.value;
+          let valueText = "—";
+          if (value === "done") valueText = t.done;
+          else if (value === "not_done") valueText = t.notDone;
+          message += `▫️ ${label}: ${valueText}\n`;
+        });
+
+        const comment = section.querySelector("textarea");
+        if (comment && comment.value.trim() !== "") {
+          message += `💬 ${comment.value.trim()}\n`;
+        }
+
+        message += `\n`;
       });
 
-      const comment = section.querySelector('textarea')?.value.trim();
-      if (comment) result.push(`Comment: ${comment}`);
+      messageLangs[lang].push(message.trim());
     });
 
-    const finalMessage = result.join('\n');
+    const token = "YOUR_TELEGRAM_BOT_TOKEN";
+    const chatId = "YOUR_CHAT_ID";
 
-    try {
-      await fetch('https://api.telegram.org/bot<8307377112:AAEb7d6w3tBypnqclQpJ5mBdSMG5SwoMWXc>/sendMessage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: '<4961000707>',
-          text: finalMessage
-        })
+    Promise.all(
+      messageLangs.en.concat(messageLangs.ru).map(msg => {
+        return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: msg,
+            parse_mode: "HTML"
+          })
+        });
+      })
+    )
+      .then(() => {
+        localStorage.removeItem("checklistData");
+        alert("Checklist sent successfully!");
+        form.reset();
+      })
+      .catch(() => {
+        alert("Failed to send checklist.");
       });
-
-      localStorage.clear();
-      alert('Checklist sent successfully!');
-      form.reset();
-    } catch (err) {
-      alert('Failed to send');
-    }
   });
+
+  // Обновление на старте
+  switchLanguage(currentLang);
+  loadForm();
+
+  // Сохранение при изменениях
+  form.addEventListener("change", saveForm);
 });
