@@ -204,8 +204,8 @@ document.addEventListener("DOMContentLoaded", function () {
       messageLangs[lang].push(message.trim());
     });
 
-    const token = "YOUR_TELEGRAM_BOT_TOKEN";
-    const chatId = "YOUR_CHAT_ID";
+    const token = "8307377112:AAEb7d6w3tBypnqclQpJ5mBdSMG5SwoMWXc";
+    const chatId = "4961000707";
 
     Promise.all(
       messageLangs.en.concat(messageLangs.ru).map(msg => {
