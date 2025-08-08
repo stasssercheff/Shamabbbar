@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const tgToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // <-- вставь свой токен
   const chatId = 'YOUR_CHAT_ID';             // <-- вставь свой чат ID
 
-  // Языковые значения по умолчанию
   const langData = {
     ru: {
       default: '—',
@@ -28,9 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const translations = {
+    ru: {},
+    en: {},
+    vi: {}
+  };
+
   let currentLang = document.documentElement.lang || 'ru';
 
-  // Переключение языка
   function switchLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
@@ -44,11 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAllSelects();
   }
 
-  // Обновление всех селекторов (qty)
   function updateAllSelects() {
     document.querySelectorAll('select.qty').forEach(select => {
       const currentValue = select.value;
       select.innerHTML = ''; // Очистить
+
       const optionDefault = document.createElement('option');
       optionDefault.value = '';
       optionDefault.textContent = langData[currentLang].default;
@@ -64,12 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
       option2.textContent = langData[currentLang].not_done;
       select.appendChild(option2);
 
-      // Сохраняем ранее выбранное значение
+      // Сохраняем предыдущее значение
       if (currentValue) select.value = currentValue;
     });
   }
 
-  // Отправка в Telegram
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -98,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
       message += `\n`;
     });
 
-    // Отправка
     const url = `https://api.telegram.org/bot${tgToken}/sendMessage`;
     const payload = {
       chat_id: chatId,
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         alert('Отправлено!');
         form.reset();
-        updateAllSelects(); // сброс селекторов с учетом языка
+        updateAllSelects();
       } else {
         alert('Ошибка при отправке');
       }
@@ -126,12 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Инициализация
   languageButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       switchLanguage(btn.dataset.lang);
     });
   });
 
-  updateAllSelects(); // первичная инициализация селекторов
+  updateAllSelects(); // первичная инициализация
 });
