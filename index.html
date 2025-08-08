@@ -16,16 +16,17 @@
     </div>
 
     <!-- Блок выбора должности -->
-    <div class="input-block">
-      <label class="check-label" data-ru="Должность" data-en="Position" data-vi="Chức vụ">Должность</label>
-      <select id="position" onchange="updateNames()" class="input-field">
-        <option value="">—</option>
-        <option value="barista">Бариста</option>
-        <option value="waiter">Официант</option>
-        <option value="cashier">Кассир</option>
-        <option value="order">Заказ</option>
-      </select>
-    </div>
+    <!-- Блок выбора должности -->
+<div class="input-block">
+  <label class="check-label" data-ru="Должность" data-en="Position" data-vi="Chức vụ">Должность</label>
+  <select id="position" onchange="updateNames()" class="input-field">
+    <option value="" data-key="select-placeholder">—</option>
+    <option value="barista" data-key="barista">Бариста</option>
+    <option value="waiter" data-key="waiter">Официант</option>
+    <option value="cashier" data-key="cashier">Кассир</option>
+    <option value="order" data-key="order">Заказ</option>
+  </select>
+</div>
 
     <!-- Блок выбора имени -->
     <div class="input-block">
