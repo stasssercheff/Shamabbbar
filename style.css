@@ -1,137 +1,134 @@
-/* Общие настройки */
 html, body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
-  font-size: 18px;
-  line-height: 1.4;
-}
-
-/* Контейнер */
-.container {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Заголовки */
-h2 {
+  font-family: Verdana, sans-serif;
+  background: #f5f5f5;
   font-size: 24px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 4px;
 }
 
-/* Блок языка */
+.container {
+  max-width: 900px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Переключение языка */
 .lang-switch {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .lang-switch button {
   flex: 1;
-  padding: 12px 0;
-  font-size: 18px;
-  background-color: #007bff;
+  font-size: 24px;
+  padding: 16px;
+  background: #444;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .lang-switch button:hover {
-  background-color: #0056b3;
+  background: #222;
 }
 
-/* Селекторы */
-select {
-  width: 100%;
-  padding: 10px;
-  font-size: 18px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  background-color: white;
+/* Вкладки */
+.tab-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-/* Метки (label) */
-.check-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-/* Поля ввода */
-input[type="text"],
-input[type="date"],
-textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 18px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  box-sizing: border-box;
-}
-
-/* Комментарий */
-.comment-block {
-  margin-top: 20px;
-}
-
-/* Кнопка отправки */
-button.send-button {
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  background-color: #28a745;
+.tab-button {
+  flex: 1;
+  font-size: 22px;
+  padding: 14px;
+  background: #888;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-button.send-button:hover {
-  background-color: #1e7e34;
+.tab-button.active {
+  background: #333;
 }
 
-/* Скрытие чеклистов по умолчанию */
-.checklist {
+/* Содержимое вкладок */
+.tab-content {
   display: none;
 }
 
-.checklist.active {
+.tab-content.active {
   display: block;
 }
 
-/* Комментарий под разделом */
-.section-comment {
-  font-style: italic;
-  color: #666;
-  margin-top: -10px;
+/* Заголовок */
+.section-title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  background: #e1ded9;
+  padding: 16px;
+  border-radius: 10px;
   margin-bottom: 20px;
-  font-size: 16px;
 }
 
-/* Респонсив */
-@media (max-width: 600px) {
-  .lang-switch {
-    flex-direction: column;
-  }
+/* Поля ввода */
+.input-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
 
-  .lang-switch button {
-    width: 100%;
-  }
+.check-label {
+  flex: 1 1 65%;
+  font-size: 22px;
+}
+
+select, .autodate {
+  flex: 1 1 30%;
+  font-size: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  text-align-last: center;
+}
+
+textarea {
+  width: 100%;
+  font-size: 20px;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+/* Кнопка отправки */
+.submit-block {
+  margin-top: 32px;
+}
+
+.submit-block button {
+  width: 100%;
+  background: #444;
+  color: white;
+  border: none;
+  padding: 18px;
+  font-size: 26px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.submit-block button:hover {
+  background: #111;
 }
