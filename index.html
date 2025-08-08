@@ -8,22 +8,19 @@
 <body>
   <div class="container">
 
-    <!-- Язык -->
+    <!-- Переключение языка -->
     <div class="lang-switch">
       <button onclick="switchLanguage('ru')">Русский</button>
       <button onclick="switchLanguage('en')">English</button>
       <button onclick="switchLanguage('vi')">Tiếng Việt</button>
     </div>
 
-    <!-- Заголовок -->
-    <h1 class="title" data-ru="Чеклист сотрудника" data-en="Staff Checklist" data-vi="Danh sách nhân viên">Чеклист сотрудника</h1>
-
     <!-- Форма -->
     <form id="checklist-form">
 
-      <!-- Роль -->
-      <div class="input-block">
-        <label for="role" data-ru="Выберите роль" data-en="Select role" data-vi="Chọn vai trò">Выберите роль</label>
+      <!-- Должность -->
+      <div class="form-group">
+        <label for="role" class="label" data-lang="label-role">Должность</label>
         <select id="role" name="role">
           <option value="">—</option>
           <option value="barista">Бариста</option>
@@ -32,32 +29,31 @@
         </select>
       </div>
 
-      <!-- Сотрудник -->
-      <div class="input-block">
-        <label for="name" data-ru="Сотрудник" data-en="Staff" data-vi="Nhân viên">Сотрудник</label>
-        <select id="name" name="name">
+      <!-- Имя сотрудника -->
+      <div class="form-group">
+        <label for="staff" class="label" data-lang="label-staff">Сотрудник</label>
+        <select id="staff" name="staff">
           <option value="">—</option>
-          <option value="Сотрудник 1">Сотрудник 1</option>
-          <option value="Сотрудник 2">Сотрудник 2</option>
-          <option value="Сотрудник 3">Сотрудник 3</option>
+          <option>Сотрудник 1</option>
+          <option>Сотрудник 2</option>
+          <option>Сотрудник 3</option>
         </select>
       </div>
 
       <!-- Дата -->
-      <div class="input-block">
-        <label for="date" data-ru="Дата" data-en="Date" data-vi="Ngày">Дата</label>
+      <div class="form-group">
+        <label for="date" class="label" data-lang="label-date">Дата</label>
         <input type="date" id="date" name="date">
       </div>
 
       <!-- Чеклист -->
-      <div id="checklist-area"></div>
+      <div id="checklist-container"></div>
 
-      <!-- Кнопка -->
-      <button type="submit" id="submit-button">Отправить</button>
-
+      <!-- Кнопка отправки -->
+      <button type="submit" id="submit-btn">Отправить</button>
     </form>
   </div>
 
-  <script src="scrips.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
