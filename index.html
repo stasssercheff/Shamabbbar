@@ -1,45 +1,89 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Чеклист</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <!-- Переключение языка -->
-    <div class="lang-switch">
-      <button onclick="switchLanguage('ru')">Русский</button>
-      <button onclick="switchLanguage('en')">English</button>
-      <button onclick="switchLanguage('vi')">Tiếng Việt</button>
-    </div>
+<section class="checklist-section" data-section="order-list">
+  <h2 class="section-title" data-i18n="order_list">Чеклист-заказ</h2>
 
-    <!-- Должность -->
-    <div class="input-block">
-      <label for="role" class="check-label" data-i18n="role">Должность</label>
-      <select id="role" onchange="updateNamesAndChecklist()" class="select-input"></select>
-    </div>
-
-    <!-- Имя -->
-    <div class="input-block">
-      <label for="name" class="check-label" data-i18n="name">Имя</label>
-      <select id="name" class="select-input"></select>
-    </div>
-
-    <!-- Дата -->
-    <div class="input-block">
-      <label for="date" class="check-label" data-i18n="date">Дата</label>
-      <input type="date" id="date" class="date-input" />
-    </div>
-
-    <!-- Чеклист -->
-    <div id="checklist"></div>
-
-    <!-- Кнопка отправки -->
-    <button id="submit-btn" onclick="sendChecklist()" data-i18n="submit">Отправить</button>
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="milk">Молоко / Sữa / Milk</label>
+    <select class="qty" name="milk">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
   </div>
 
-  <script src="script.js"></script>
-</body>
-</html>
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="syrup">Сиропы / Siro / Syrups</label>
+    <select class="qty" name="syrups">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="tea">Чай / Trà / Tea</label>
+    <select class="qty" name="tea">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="coffee_beans">Зерно / Hạt cà phê / Coffee beans</label>
+    <select class="qty" name="coffee_beans">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="toppings">Топпинги / Topping / Toppings</label>
+    <select class="qty" name="toppings">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="cups">Стаканы / Ly / Cups</label>
+    <select class="qty" name="cups">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="napkins">Салфетки / Khăn giấy / Napkins</label>
+    <select class="qty" name="napkins">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <div class="checklist-item">
+    <label class="check-label" data-i18n="packaging">Упаковка / Bao bì / Packaging</label>
+    <select class="qty" name="packaging">
+      <option value="">—</option>
+      <option value="есть" data-i18n-opt="have">Есть</option>
+      <option value="мало" data-i18n-opt="low">Мало</option>
+      <option value="заказать" data-i18n-opt="order">Заказать</option>
+    </select>
+  </div>
+
+  <!-- Комментарий -->
+  <div class="comment-block">
+    <label class="check-label" data-i18n="comment">Комментарий / Ghi chú / Comment</label>
+    <textarea name="order_list_comment" rows="3" placeholder="..."></textarea>
+  </div>
+</section>
