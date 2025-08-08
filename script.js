@@ -1,177 +1,190 @@
-const BOT_TOKEN = '6420665890:AAFRBCqLguAk43O3VVnUsaS3-3eZ4q7L8m4';
-const CHAT_ID = '@checklist_qla';
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("checklist-form");
+  const nameInput = document.getElementById("staffName");
+  const dateInput = document.getElementById("checkDate");
+  const positionSelect = document.getElementById("position");
+  const checklistContainer = document.getElementById("checklist-container");
+  const langButtons = document.querySelectorAll(".lang-switch button");
 
-let currentLang = 'ru';
+  let currentLang = "ru";
 
-// Переводы для селектора должностей
-const positionTranslations = {
-  barista: { ru: "Бариста", en: "Barista", vi: "Barista" },
-  waiter: { ru: "Официант", en: "Waiter", vi: "Phục vụ" },
-  cashier: { ru: "Кассир", en: "Cashier", vi: "Thu ngân" },
-  order: { ru: "Заказ", en: "Order", vi: "Đơn hàng" },
-  "select-placeholder": { ru: "—", en: "—", vi: "—" }
-};
+  const telegramToken = "XXX:XXXXXXXX"; // ← ВСТАВЬ СВОЙ ТОКЕН
+  const telegramChatId = "chat_id";     // ← ВСТАВЬ СВОЙ CHAT_ID
 
-// Переключение языка
-function switchLanguage(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-
-  document.querySelectorAll('[data-ru]').forEach(el => {
-    el.textContent = el.getAttribute(`data-${lang}`);
-  });
-
-  // Обновляем placeholder'ы в <select>
-  document.querySelectorAll('select').forEach(select => {
-    const firstOption = select.options[0];
-    if (firstOption && firstOption.dataset.default === "true") {
-      firstOption.textContent = positionTranslations["select-placeholder"][lang];
-    }
-  });
-
-  // Переводим <option> в селекторе должностей
-  document.querySelectorAll('#position option[data-key]').forEach(opt => {
-    const key = opt.dataset.key;
-    if (positionTranslations[key]) {
-      opt.textContent = positionTranslations[key][lang];
-    }
-  });
-
-  generateChecklist();
-  restoreFormState();
-}
-
-// Отображение чеклиста после выбора должности
-document.getElementById('position').addEventListener('change', function () {
-  const selected = this.value;
-  document.querySelectorAll('.checklist-section').forEach(section => {
-    section.style.display = 'none';
-  });
-  if (selected) {
-    document.getElementById(`checklist-${selected}`).style.display = 'block';
-  }
-  saveFormState();
-});
-
-// Автоматическая дата
-document.addEventListener("DOMContentLoaded", function () {
-  const dateInput = document.getElementById("date");
-  const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0];
-  dateInput.value = formattedDate;
-
-  restoreFormState();
-});
-
-// Сохраняем форму
-function saveFormState() {
-  const formData = {
-    name: document.getElementById("name").value,
-    date: document.getElementById("date").value,
-    position: document.getElementById("position").value,
-    selects: {},
-    comments: {}
+  const positionTranslations = {
+    barista: { ru: "Бариста", en: "Barista", vi: "Barista" },
+    waiter: { ru: "Официант", en: "Waiter", vi: "Phục vụ" },
+    cashier: { ru: "Кассир", en: "Cashier", vi: "Thu ngân" },
+    order: { ru: "Заказ", en: "Order", vi: "Đơn hàng" },
+    "select-placeholder": { ru: "—", en: "—", vi: "—" }
   };
 
-  document.querySelectorAll(".checklist-section").forEach(section => {
-    section.querySelectorAll("select").forEach(select => {
-      formData.selects[select.id] = select.value;
+  const translations = {
+    send: { ru: "Отправить", en: "Send", vi: "Gửi" },
+    date: { ru: "Дата", en: "Date", vi: "Ngày" },
+    name: { ru: "Имя", en: "Name", vi: "Tên" }
+  };
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+
+    // Текстовые элементы
+    document.querySelectorAll("[data-ru]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
     });
-    section.querySelectorAll("textarea").forEach(textarea => {
-      formData.comments[textarea.id] = textarea.value;
+
+    // Селектор должности
+    document.querySelectorAll("#position option[data-key]").forEach(opt => {
+      const key = opt.dataset.key;
+      if (positionTranslations[key]) {
+        opt.textContent = positionTranslations[key][lang];
+      }
     });
-  });
 
-  localStorage.setItem("checklistForm", JSON.stringify(formData));
-}
+    // Placeholder селекторов чеклиста
+    document.querySelectorAll("select.qty").forEach(select => {
+      const firstOption = select.options[0];
+      if (firstOption) {
+        firstOption.textContent = positionTranslations["select-placeholder"][lang];
+      }
+    });
 
-// Восстанавливаем форму
-function restoreFormState() {
-  const data = JSON.parse(localStorage.getItem("checklistForm"));
-  if (!data) return;
-
-  document.getElementById("name").value = data.name || '';
-  document.getElementById("date").value = data.date || '';
-  document.getElementById("position").value = data.position || '';
-
-  document.querySelectorAll('.checklist-section').forEach(section => {
-    section.style.display = 'none';
-  });
-
-  if (data.position) {
-    const section = document.getElementById(`checklist-${data.position}`);
-    if (section) section.style.display = 'block';
+    // Перезапустить чеклист
+    generateChecklist();
   }
 
-  for (const id in data.selects) {
-    const select = document.getElementById(id);
-    if (select) select.value = data.selects[id];
+  function generateChecklist() {
+    const selected = positionSelect.value;
+    const checklistId = `checklist-${selected}`;
+    document.querySelectorAll(".checklist-block").forEach(block => {
+      block.style.display = block.id === checklistId ? "block" : "none";
+    });
   }
 
-  for (const id in data.comments) {
-    const textarea = document.getElementById(id);
-    if (textarea) textarea.value = data.comments[id];
-  }
-}
+  function saveToLocal() {
+    const data = {
+      name: nameInput.value,
+      date: dateInput.value,
+      position: positionSelect.value,
+      fields: {},
+      comments: {}
+    };
 
-// Генерация Telegram-сообщения
-function generateChecklist() {
-  const name = document.getElementById("name").value || '—';
-  const date = document.getElementById("date").value || '—';
-  const position = document.getElementById("position").value;
+    document.querySelectorAll(".checklist-block").forEach(block => {
+      const inputs = block.querySelectorAll("select.qty");
+      inputs.forEach(input => {
+        data.fields[input.name] = input.value;
+      });
 
-  const section = document.getElementById(`checklist-${position}`);
-  if (!section) return;
+      const textarea = block.querySelector("textarea.comment");
+      if (textarea) data.comments[block.id] = textarea.value;
+    });
 
-  const checklistTitle = positionTranslations[position]?.en || "Checklist";
-
-  let message = `👤 Name: ${name}\n📅 Date: ${date}\n📌 Position: ${checklistTitle}\n\n`;
-
-  section.querySelectorAll(".item-row").forEach(row => {
-    const label = row.querySelector("label")?.textContent.trim() || "";
-    const select = row.querySelector("select");
-    const value = select?.value || "—";
-    message += `• ${label}: ${value === "" ? "—" : value}\n`;
-  });
-
-  const comment = section.querySelector("textarea")?.value.trim();
-  if (comment) {
-    message += `\n💬 Comment:\n${comment}`;
+    localStorage.setItem("checklistData", JSON.stringify(data));
   }
 
-  return message;
-}
+  function loadFromLocal() {
+    const saved = localStorage.getItem("checklistData");
+    if (!saved) return;
+    try {
+      const data = JSON.parse(saved);
+      nameInput.value = data.name || "";
+      dateInput.value = data.date || "";
+      positionSelect.value = data.position || "";
 
-// Отправка в Telegram
-function sendToTelegram() {
-  const msg = generateChecklist();
-  if (!msg) return;
+      generateChecklist();
 
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      chat_id: CHAT_ID,
-      text: msg,
-      parse_mode: "HTML"
-    })
-  }).then(res => {
-    if (res.ok) {
-      alert("Checklist sent successfully!");
-      localStorage.removeItem("checklistForm");
-      window.location.reload();
-    } else {
-      alert("Failed to send. Try again.");
+      document.querySelectorAll(".checklist-block").forEach(block => {
+        const inputs = block.querySelectorAll("select.qty");
+        inputs.forEach(input => {
+          if (data.fields[input.name]) {
+            input.value = data.fields[input.name];
+          }
+        });
+
+        const textarea = block.querySelector("textarea.comment");
+        if (textarea && data.comments[block.id]) {
+          textarea.value = data.comments[block.id];
+        }
+      });
+    } catch (e) {
+      console.warn("Ошибка загрузки данных");
     }
-  }).catch(() => {
-    alert("Error occurred during sending.");
-  });
-}
+  }
 
-// Отправка при клике
-document.getElementById("submit-btn").addEventListener("click", () => {
-  saveFormState();
-  sendToTelegram();
+  function formatMessage(lang) {
+    const name = nameInput.value || "—";
+    const date = dateInput.value || "—";
+    const positionKey = positionSelect.value;
+    const position = positionTranslations[positionKey]?.[lang] || "—";
+
+    let msg = `👤 ${translations.name[lang]}: ${name}\n📅 ${translations.date[lang]}: ${date}\n📌 ${positionTranslations[positionKey]?.[lang] || positionKey}\n\n`;
+
+    const checklistId = `checklist-${positionKey}`;
+    const block = document.getElementById(checklistId);
+
+    if (!block) return msg;
+
+    block.querySelectorAll(".check-row").forEach(row => {
+      const label = row.querySelector("label.check-label");
+      const select = row.querySelector("select.qty");
+      const key = select ? select.value || "—" : "—";
+      msg += `- ${label?.textContent?.trim() || "—"}: ${key}\n`;
+    });
+
+    const comment = block.querySelector("textarea.comment");
+    if (comment && comment.value.trim()) {
+      msg += `\n💬 ${comment.value.trim()}\n`;
+    }
+
+    return msg;
+  }
+
+  async function sendToTelegram(text) {
+    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
+    const body = {
+      chat_id: telegramChatId,
+      text: text,
+      parse_mode: "HTML"
+    };
+    try {
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+    } catch (e) {
+      alert("Ошибка отправки в Telegram");
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = formatMessage("en");
+    await sendToTelegram(msg);
+
+    localStorage.removeItem("checklistData");
+    alert("Отправлено ✅");
+    form.reset();
+    generateChecklist();
+  });
+
+  langButtons.forEach(btn => {
+    btn.addEventListener("click", () => switchLanguage(btn.dataset.lang));
+  });
+
+  positionSelect.addEventListener("change", () => {
+    generateChecklist();
+    saveToLocal();
+  });
+
+  form.addEventListener("input", saveToLocal);
+
+  // Установка текущей даты
+  const today = new Date().toISOString().slice(0, 10);
+  dateInput.value = today;
+
+  loadFromLocal();
+  generateChecklist();
 });
