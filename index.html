@@ -1,89 +1,207 @@
-<section class="checklist-section" data-section="order-list">
-  <h2 class="section-title" data-i18n="order_list">Чеклист-заказ</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Чеклист</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Языковой переключатель -->
+    <div class="lang-switch">
+      <button onclick="switchLanguage('ru')">Рус</button>
+      <button onclick="switchLanguage('en')">Eng</button>
+      <button onclick="switchLanguage('vi')">Vie</button>
+    </div>
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="milk">Молоко / Sữa / Milk</label>
-    <select class="qty" name="milk">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
+    <!-- Блок выбора должности -->
+    <div class="input-block">
+      <label class="check-label" data-ru="Должность" data-en="Position" data-vi="Chức vụ">Должность</label>
+      <select id="position" onchange="updateNames()" class="input-field">
+        <option value="">—</option>
+        <option value="barista">Бариста</option>
+        <option value="waiter">Официант</option>
+        <option value="cashier">Кассир</option>
+        <option value="order">Заказ</option>
+      </select>
+    </div>
+
+    <!-- Блок выбора имени -->
+    <div class="input-block">
+      <label class="check-label" data-ru="Имя" data-en="Name" data-vi="Tên">Имя</label>
+      <select id="name" class="input-field">
+        <option value="">—</option>
+      </select>
+    </div>
+
+    <!-- Дата (фиксированная, не редактируемая) -->
+    <div class="input-block">
+      <label class="check-label" data-ru="Дата" data-en="Date" data-vi="Ngày">Дата</label>
+      <input type="text" id="current-date" class="input-field" readonly />
+    </div>
+
+    <!-- Контейнер для чеклиста -->
+    <div id="checklist-container"></div>
+
+    <!-- Кнопка отправки -->
+    <button id="submit-button" onclick="submitChecklist()">Отправить</button>
   </div>
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="syrup">Сиропы / Siro / Syrups</label>
-    <select class="qty" name="syrups">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+  <script>
+    const names = {
+      barista: ["Анна", "Игорь", "Сон"],
+      waiter: ["Маша", "Киет", "Таня"],
+      cashier: ["Ольга", "Нгуен", "Виктор"],
+      order: ["Алекс", "Тху", "Лин"]
+    };
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="tea">Чай / Trà / Tea</label>
-    <select class="qty" name="tea">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+    const checklistData = {
+      barista: [
+        ["Протереть сиропы", "Lau sạch các chai siro", "Wipe syrup bottles"],
+        ["Чистота стол", "Lau bàn cho sạch sẽ", "Wipe the table clean"],
+        ["Чистота поверхность бара", "Lau bề mặt quầy bar", "Clean the bar surface"],
+        ["Оборудование с моющим", "Rửa thiết bị bằng nước rửa chén", "Wash equipment with detergent"],
+        ["Раковина", "Rửa bồn rửa chén", "Clean the sink"],
+        ["Выкинуть остатки еды", "Bỏ thức ăn thừa", "Throw away leftover food"],
+        ["Посуду вытереть", "Lau khô chén đĩa", "Dry the dishes"],
+        ["Коврики помыть", "Rửa thảm chống trượt", "Wash anti-slip mats"],
+        ["Кофемашина", "Vệ sinh máy pha cà phê", "Clean the coffee machine"],
+        ["Отключить термопот", "Tắt bình thủy điện", "Turn off the thermal pot"],
+        ["Вынести мусор", "Đổ rác", "Take out the trash"],
+        ["Протереть всё", "Lau chùi mọi thứ", "Wipe everything down"],
+        ["Тряпки на кухню", "Đem khăn lau xuống bếp", "Bring cleaning cloths to the kitchen"]
+      ]
+    };
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="coffee_beans">Зерно / Hạt cà phê / Coffee beans</label>
-    <select class="qty" name="coffee_beans">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+    const langMap = { ru: 0, vi: 1, en: 2 };
+    let currentLang = 'ru';
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="toppings">Топпинги / Topping / Toppings</label>
-    <select class="qty" name="toppings">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+    function switchLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-ru]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+      generateChecklist();
+    }
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="cups">Стаканы / Ly / Cups</label>
-    <select class="qty" name="cups">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+    function updateNames() {
+      const position = document.getElementById("position").value;
+      const nameSelect = document.getElementById("name");
+      nameSelect.innerHTML = '<option value="">—</option>';
+      if (names[position]) {
+        names[position].forEach(name => {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          nameSelect.appendChild(option);
+        });
+      }
+      generateChecklist();
+    }
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="napkins">Салфетки / Khăn giấy / Napkins</label>
-    <select class="qty" name="napkins">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+    function generateChecklist() {
+      const position = document.getElementById("position").value;
+      const container = document.getElementById("checklist-container");
+      container.innerHTML = "";
+      if (!checklistData[position]) return;
 
-  <div class="checklist-item">
-    <label class="check-label" data-i18n="packaging">Упаковка / Bao bì / Packaging</label>
-    <select class="qty" name="packaging">
-      <option value="">—</option>
-      <option value="есть" data-i18n-opt="have">Есть</option>
-      <option value="мало" data-i18n-opt="low">Мало</option>
-      <option value="заказать" data-i18n-opt="order">Заказать</option>
-    </select>
-  </div>
+      checklistData[position].forEach(([ru, vi, en], i) => {
+        const block = document.createElement("div");
+        block.className = "input-block";
+        const label = document.createElement("label");
+        label.className = "check-label";
+        label.textContent = [ru, vi, en][langMap[currentLang]];
+        const select = document.createElement("select");
+        select.className = "input-field";
+        select.innerHTML = `
+          <option value="">—</option>
+          <option value="yes" data-ru="Сделано" data-en="Done" data-vi="Xong">Сделано</option>
+          <option value="no" data-ru="Не сделано" data-en="Not done" data-vi="Chưa làm">Не сделано</option>
+        `;
+        block.appendChild(label);
+        block.appendChild(select);
+        container.appendChild(block);
+      });
+    }
 
-  <!-- Комментарий -->
-  <div class="comment-block">
-    <label class="check-label" data-i18n="comment">Комментарий / Ghi chú / Comment</label>
-    <textarea name="order_list_comment" rows="3" placeholder="..."></textarea>
-  </div>
-</section>
+    function setToday() {
+      const d = new Date();
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      document.getElementById("current-date").value = `${dd}/${mm}/${yyyy}`;
+    }
+
+    function submitChecklist() {
+      alert("Отправка реализуется отдельно");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setToday();
+    });
+  </script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 18px;
+    }
+
+    .lang-switch {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .lang-switch button {
+      flex: 1;
+      padding: 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .input-block {
+      margin-bottom: 16px;
+    }
+
+    .check-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+    }
+
+    #submit-button {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      margin-top: 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</body>
+</html>
