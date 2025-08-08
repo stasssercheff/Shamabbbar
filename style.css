@@ -1,90 +1,101 @@
-/* Основной контейнер */
-.container {
-  max-width: 85%;
-  margin: 0 auto;
-  font-size: 22px;
-  line-height: 1.5;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+/* Общие настройки */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 18px;
+  line-height: 1.4;
 }
 
-/* Переключение языка — три кнопки по 33.33% */
+/* Контейнер */
+.container {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовки */
+h2 {
+  font-size: 24px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 4px;
+}
+
+/* Блок языка */
 .lang-switch {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
 .lang-switch button {
   flex: 1;
-  font-size: 20px;
-  padding: 14px 0;
+  padding: 12px 0;
+  font-size: 18px;
+  background-color: #007bff;
+  color: white;
   border: none;
   border-radius: 8px;
-  background-color: #e0e0e0;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .lang-switch button:hover {
-  background-color: #ccc;
-}
-
-.lang-switch button.active {
-  background-color: #bbb;
-  font-weight: bold;
-}
-
-/* Заголовки секций */
-.section-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 25px 0 10px;
-}
-
-/* Названия пунктов */
-.check-label {
-  display: inline-block;
-  width: 65%;
-  font-weight: 500;
-  vertical-align: middle;
+  background-color: #0056b3;
 }
 
 /* Селекторы */
-select.qty {
-  width: 30%;
-  font-size: 20px;
+select {
+  width: 100%;
   padding: 10px;
-  margin-left: 5%;
-  border-radius: 8px;
+  font-size: 18px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  background-color: #f8f8f8;
-  appearance: none;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  background-color: white;
 }
 
-/* Поля ввода (имя, дата, комментарии) */
+/* Метки (label) */
+.check-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Поля ввода */
 input[type="text"],
 input[type="date"],
 textarea {
   width: 100%;
-  font-size: 20px;
-  padding: 12px;
-  margin-top: 8px;
-  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
   box-sizing: border-box;
 }
 
+/* Комментарий */
+.comment-block {
+  margin-top: 20px;
+}
+
 /* Кнопка отправки */
-button.submit-button {
+button.send-button {
   width: 100%;
-  font-size: 22px;
-  padding: 16px;
-  background-color: #4caf50;
+  padding: 15px;
+  font-size: 18px;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 10px;
@@ -92,27 +103,35 @@ button.submit-button {
   transition: background-color 0.3s ease;
 }
 
-button.submit-button:hover {
-  background-color: #45a049;
+button.send-button:hover {
+  background-color: #1e7e34;
 }
 
-/* Комментарии к секциям */
+/* Скрытие чеклистов по умолчанию */
+.checklist {
+  display: none;
+}
+
+.checklist.active {
+  display: block;
+}
+
+/* Комментарий под разделом */
 .section-comment {
-  margin-top: 12px;
-  font-size: 20px;
+  font-style: italic;
+  color: #666;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  font-size: 16px;
 }
 
-/* Адаптивность */
-@media screen and (max-width: 600px) {
-  .check-label {
-    display: block;
-    width: 100%;
-    margin-bottom: 6px;
+/* Респонсив */
+@media (max-width: 600px) {
+  .lang-switch {
+    flex-direction: column;
   }
 
-  select.qty {
+  .lang-switch button {
     width: 100%;
-    margin-left: 0;
-    margin-bottom: 16px;
   }
 }
