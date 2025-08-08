@@ -1,95 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Checklist</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="checklist.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Чеклист</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="wrapper">
-    <div class="container">
+  <div class="container">
 
-      <!-- Переключение языка -->
-      <div class="lang-switch">
-        <button onclick="switchLanguage('ru')">Русский</button>
-        <button onclick="switchLanguage('en')">English</button>
-        <button onclick="switchLanguage('vi')">Tiếng Việt</button>
-      </div>
+    <!-- Переключение языка -->
+    <div class="lang-switch">
+      <button onclick="switchLanguage('ru')">Русский</button>
+      <button onclick="switchLanguage('en')">English</button>
+      <button onclick="switchLanguage('vi')">Tiếng Việt</button>
+    </div>
 
-      <!-- Выбор чеклиста -->
-      <div class="input-block">
-        <label class="check-label" data-lang="checklist">Чеклист / Checklist</label>
-        <select id="checklistType" class="input-select">
-          <option value="">—</option>
-          <option value="barista">Бариста / Barista</option>
-          <option value="waiter">Официант / Waiter</option>
-          <option value="cashier">Кассир / Cashier</option>
-        </select>
-      </div>
+    <!-- Выбор типа чеклиста -->
+    <div class="input-block">
+      <label for="checklistType" class="check-label lang" data-ru="Тип чеклиста" data-en="Checklist Type" data-vi="Loại checklist">Тип чеклиста</label>
+      <select id="checklistType" onchange="updateNameList()" class="select">
+        <option value="">—</option>
+        <option value="barista">Бариста</option>
+        <option value="waiter">Официант</option>
+        <option value="cashier">Кассир</option>
+      </select>
+    </div>
 
-      <!-- Выбор имени -->
-      <div class="input-block">
-        <label class="check-label" data-lang="name">Имя / Name</label>
-        <select id="nameSelect" class="input-select">
-          <option value="">—</option>
-          <!-- Варианты имен будут подставлены через JS -->
-        </select>
-      </div>
+    <!-- Имя -->
+    <div class="input-block">
+      <label for="staffName" class="check-label lang" data-ru="Имя" data-en="Name" data-vi="Tên">Имя</label>
+      <select id="staffName" class="select">
+        <option value="">—</option>
+        <!-- Имя добавляется динамически -->
+      </select>
+    </div>
 
-      <!-- Дата -->
-      <div class="input-block">
-        <label class="check-label" data-lang="date">Дата / Date</label>
-        <input type="date" id="dateInput" class="input-select">
-      </div>
+    <!-- Дата -->
+    <div class="input-block">
+      <label for="dateInput" class="check-label lang" data-ru="Дата" data-en="Date" data-vi="Ngày">Дата</label>
+      <input type="date" id="dateInput" class="date-input" />
+    </div>
 
-      <!-- Чеклист: Бариста -->
-      <div id="baristaChecklist" class="checklist-section hidden">
-        <h3 data-lang="barista-title">Чеклист бариста / Barista Checklist</h3>
+    <!-- Чеклист Бариста -->
+    <div id="checklist-barista" class="checklist-section" style="display:none;">
+      <h3 class="section-title lang"
+          data-ru="Бариста"
+          data-en="Barista"
+          data-vi="Barista">Бариста</h3>
 
-        <div class="input-block">
-          <label class="check-label" data-label-ru="Проверить кофемашину" data-label-en="Check coffee machine" data-label-vi="Kiểm tra máy pha cà phê">Проверить кофемашину</label>
-          <select class="input-select qty">
+      <div class="checklist">
+        <div class="check-item">
+          <label class="check-label lang"
+            data-ru="Протереть сиропы"
+            data-en="Wipe syrup bottles"
+            data-vi="Lau sạch các chai siro">Протереть сиропы</label>
+          <select class="qty-select">
             <option value="">—</option>
-            <option value="done" data-lang-ru="Сделано" data-lang-en="Done" data-lang-vi="Hoàn thành">Сделано</option>
-            <option value="not_done" data-lang-ru="Не сделано" data-lang-en="Not done" data-lang-vi="Chưa làm">Не сделано</option>
+            <option class="lang" data-ru="Сделано" data-en="Done" data-vi="Hoàn thành">Сделано</option>
+            <option class="lang" data-ru="Не сделано" data-en="Not done" data-vi="Chưa làm">Не сделано</option>
           </select>
         </div>
 
-        <div class="input-block">
-          <label class="check-label" data-label-ru="Заполнить молоко" data-label-en="Refill milk" data-label-vi="Đổ sữa">Заполнить молоко</label>
-          <select class="input-select qty">
+        <!-- Повторяем блок .check-item для каждого пункта -->
+
+        <div class="check-item">
+          <label class="check-label lang" data-ru="Чистота стол" data-en="Wipe the table clean" data-vi="Lau bàn cho sạch sẽ">Чистота стол</label>
+          <select class="qty-select">
             <option value="">—</option>
-            <option value="done" data-lang-ru="Сделано" data-lang-en="Done" data-lang-vi="Hoàn thành">Сделано</option>
-            <option value="not_done" data-lang-ru="Не сделано" data-lang-en="Not done" data-lang-vi="Chưa làm">Не сделано</option>
+            <option class="lang" data-ru="Сделано" data-en="Done" data-vi="Hoàn thành">Сделано</option>
+            <option class="lang" data-ru="Не сделано" data-en="Not done" data-vi="Chưa làm">Не сделано</option>
           </select>
         </div>
 
-        <!-- Комментарий -->
-        <div class="input-block">
-          <label class="check-label" data-lang="comment">Комментарий / Comment</label>
-          <textarea class="input-select comment-area" rows="3"></textarea>
+        <div class="check-item">
+          <label class="check-label lang" data-ru="Чистота поверхность бара" data-en="Clean the bar surface" data-vi="Lau bề mặt quầy bar">Чистота поверхность бара</label>
+          <select class="qty-select">
+            <option value="">—</option>
+            <option class="lang" data-ru="Сделано" data-en="Done" data-vi="Hoàn thành">Сделано</option>
+            <option class="lang" data-ru="Не сделано" data-en="Not done" data-vi="Chưa làm">Не сделано</option>
+          </select>
         </div>
-      </div>
 
-      <!-- Чеклист: Официант -->
-      <div id="waiterChecklist" class="checklist-section hidden">
-        <h3 data-lang="waiter-title">Чеклист официанта / Waiter Checklist</h3>
-        <!-- Аналогично заполняется через JS или вручную -->
+        <!-- и т.д. для остальных пунктов из твоего списка -->
       </div>
+    </div>
 
-      <!-- Чеклист: Кассир -->
-      <div id="cashierChecklist" class="checklist-section hidden">
-        <h3 data-lang="cashier-title">Чеклист кассира / Cashier Checklist</h3>
-        <!-- Аналогично заполняется через JS или вручную -->
-      </div>
+    <!-- Комментарий -->
+    <div class="input-block">
+      <label for="comment" class="check-label lang" data-ru="Комментарий" data-en="Comment" data-vi="Ghi chú">Комментарий</label>
+      <textarea id="comment" class="textarea" rows="3"></textarea>
+    </div>
 
-      <!-- Кнопка отправки -->
-      <div class="input-block">
-        <button id="submitBtn" class="submit-btn" data-lang="send">Отправить / Submit</button>
-      </div>
-
+    <!-- Кнопка отправки -->
+    <div class="input-block">
+      <button id="submitBtn" class="submit-btn lang"
+        data-ru="Отправить"
+        data-en="Send"
+        data-vi="Gửi">Отправить</button>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
