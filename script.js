@@ -1,138 +1,125 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const languageButtons = document.querySelectorAll('.lang-switch button');
-  const languageElements = document.querySelectorAll('[data-lang]');
-  const selectElements = document.querySelectorAll('select');
-  const form = document.getElementById('checklist-form');
-  const tgToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // <-- вставь свой токен
-  const chatId = 'YOUR_CHAT_ID';             // <-- вставь свой чат ID
-
-  const langData = {
-    ru: {
-      default: '—',
-      done: 'Сделано',
-      not_done: 'Не сделано',
-      not_selected: '— Не выбрано —',
-    },
-    en: {
-      default: '—',
-      done: 'Done',
-      not_done: 'Not done',
-      not_selected: '— Not selected —',
-    },
-    vi: {
-      default: '—',
-      done: 'Đã làm',
-      not_done: 'Chưa làm',
-      not_selected: '— Chưa chọn —',
-    }
+<script>
+  const names = {
+    barista: ["Анна", "Игорь", "Сон"],
+    waiter: ["Маша", "Киет", "Таня"],
+    cashier: ["Ольга", "Нгуен", "Виктор"],
+    order: ["Алекс", "Тху", "Лин"]
   };
 
-  const translations = {
-    ru: {},
-    en: {},
-    vi: {}
+  const checklistData = {
+    barista: [
+      ["Протереть сиропы", "Lau sạch các chai siro", "Wipe syrup bottles"],
+      ["Чистота стол", "Lau bàn cho sạch sẽ", "Wipe the table clean"],
+      ["Чистота поверхность бара", "Lau bề mặt quầy bar", "Clean the bar surface"],
+      ["Оборудование с моющим", "Rửa thiết bị bằng nước rửa chén", "Wash equipment with detergent"],
+      ["Раковина", "Rửa bồn rửa chén", "Clean the sink"],
+      ["Выкинуть остатки еды", "Bỏ thức ăn thừa", "Throw away leftover food"],
+      ["Посуду вытереть", "Lau khô chén đĩa", "Dry the dishes"],
+      ["Коврики помыть", "Rửa thảm chống trượt", "Wash anti-slip mats"],
+      ["Кофемашина", "Vệ sinh máy pha cà phê", "Clean the coffee machine"],
+      ["Отключить термопот", "Tắt bình thủy điện", "Turn off the thermal pot"],
+      ["Вынести мусор", "Đổ rác", "Take out the trash"],
+      ["Протереть всё", "Lau chùi mọi thứ", "Wipe everything down"],
+      ["Тряпки на кухню", "Đem khăn lau xuống bếp", "Bring cleaning cloths to the kitchen"]
+    ]
   };
 
-  let currentLang = document.documentElement.lang || 'ru';
+  const langMap = { ru: 0, vi: 1, en: 2 };
+  let currentLang = 'ru';
 
   function switchLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
 
-    languageElements.forEach(el => {
-      const key = el.getAttribute('data-lang');
-      if (el.tagName === 'OPTION' || el.tagName === 'SELECT') return;
-      el.textContent = translations[lang][key] || el.textContent;
+    // Обновление всех label'ов
+    document.querySelectorAll('[data-ru]').forEach(el => {
+      el.textContent = el.getAttribute(`data-${lang}`);
     });
 
-    updateAllSelects();
+    // Обновление option внутри всех select'ов
+    document.querySelectorAll('select option').forEach(opt => {
+      if (opt.dataset.ru) {
+        opt.textContent = opt.dataset[lang];
+      }
+    });
+
+    generateChecklist();
   }
 
-  function updateAllSelects() {
-    document.querySelectorAll('select.qty').forEach(select => {
-      const currentValue = select.value;
-      select.innerHTML = ''; // Очистить
-
-      const optionDefault = document.createElement('option');
-      optionDefault.value = '';
-      optionDefault.textContent = langData[currentLang].default;
-      select.appendChild(optionDefault);
-
-      const option1 = document.createElement('option');
-      option1.value = 'done';
-      option1.textContent = langData[currentLang].done;
-      select.appendChild(option1);
-
-      const option2 = document.createElement('option');
-      option2.value = 'not_done';
-      option2.textContent = langData[currentLang].not_done;
-      select.appendChild(option2);
-
-      // Сохраняем предыдущее значение
-      if (currentValue) select.value = currentValue;
-    });
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('name')?.value || '—';
-    const date = document.getElementById('date')?.value || '—';
-    const sections = document.querySelectorAll('.section');
-    let message = `📝 Checklist\n👤 Name: ${name}\n📅 Date: ${date}\n\n`;
-
-    sections.forEach(section => {
-      const sectionTitle = section.querySelector('h3')?.textContent.trim() || '';
-      const selects = section.querySelectorAll('select.qty');
-      const labels = section.querySelectorAll('label.check-label');
-      const comment = section.querySelector('textarea')?.value || '';
-      message += `📌 ${sectionTitle}\n`;
-
-      selects.forEach((select, index) => {
-        const label = labels[index]?.textContent.trim() || '';
-        const value = select.value ? langData.en[select.value] : langData.en.default;
-        message += `• ${label}: ${value}\n`;
+  function updateNames() {
+    const position = document.getElementById("position").value;
+    const nameSelect = document.getElementById("name");
+    nameSelect.innerHTML = '<option value="">—</option>';
+    if (names[position]) {
+      names[position].forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        nameSelect.appendChild(option);
       });
-
-      if (comment.trim()) {
-        message += `💬 Comment: ${comment.trim()}\n`;
-      }
-
-      message += `\n`;
-    });
-
-    const url = `https://api.telegram.org/bot${tgToken}/sendMessage`;
-    const payload = {
-      chat_id: chatId,
-      text: message,
-      parse_mode: 'HTML'
-    };
-
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        alert('Отправлено!');
-        form.reset();
-        updateAllSelects();
-      } else {
-        alert('Ошибка при отправке');
-      }
-    } catch (error) {
-      console.error('Ошибка:', error);
-      alert('Ошибка соединения');
     }
-  });
+    generateChecklist();
+  }
 
-  languageButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      switchLanguage(btn.dataset.lang);
+  function generateChecklist() {
+    const position = document.getElementById("position").value;
+    const container = document.getElementById("checklist-container");
+    container.innerHTML = "";
+    if (!checklistData[position]) return;
+
+    checklistData[position].forEach(([ru, vi, en]) => {
+      const block = document.createElement("div");
+      block.className = "input-block";
+
+      const label = document.createElement("label");
+      label.className = "check-label";
+      label.textContent = [ru, vi, en][langMap[currentLang]];
+      block.appendChild(label);
+
+      const select = document.createElement("select");
+      select.className = "input-field";
+
+      const option1 = document.createElement("option");
+      option1.value = "";
+      option1.textContent = "—";
+
+      const option2 = document.createElement("option");
+      option2.value = "yes";
+      option2.dataset.ru = "Сделано";
+      option2.dataset.en = "Done";
+      option2.dataset.vi = "Xong";
+      option2.textContent = option2.dataset[currentLang];
+
+      const option3 = document.createElement("option");
+      option3.value = "no";
+      option3.dataset.ru = "Не сделано";
+      option3.dataset.en = "Not done";
+      option3.dataset.vi = "Chưa làm";
+      option3.textContent = option3.dataset[currentLang];
+
+      select.appendChild(option1);
+      select.appendChild(option2);
+      select.appendChild(option3);
+
+      block.appendChild(select);
+      container.appendChild(block);
     });
-  });
+  }
 
-  updateAllSelects(); // первичная инициализация
-});
+  function setToday() {
+    const d = new Date();
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    document.getElementById("current-date").value = `${dd}/${mm}/${yyyy}`;
+  }
+
+  function submitChecklist() {
+    alert("Отправка реализуется отдельно");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    setToday();
+    switchLanguage(currentLang);
+  });
+</script>
