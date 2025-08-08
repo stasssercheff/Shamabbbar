@@ -1,4 +1,6 @@
-/* Общие настройки */
+/* =========================
+   Базовые стили
+========================= */
 html, body {
   margin: 0;
   padding: 0;
@@ -19,10 +21,12 @@ html, body {
   background: #fff;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 0 6px rgba(0,0,0,.1);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Кнопки языка */
+/* =========================
+   Переключатель языка
+========================= */
 .lang-switch {
   display: flex;
   width: 100%;
@@ -35,10 +39,11 @@ html, body {
   font-size: 24px;
   border: none;
   background: #555;
-  color: white;
+  color: #fff;
   cursor: pointer;
   border-radius: 8px;
   margin-right: 10px;
+  transition: background 0.2s ease-in-out;
 }
 
 .lang-switch button:last-child {
@@ -49,7 +54,9 @@ html, body {
   background: #222;
 }
 
-/* Секция */
+/* =========================
+   Секции и заголовки
+========================= */
 .menu-section {
   margin: 32px 0;
   padding: 24px;
@@ -57,7 +64,6 @@ html, body {
   border-radius: 12px;
 }
 
-/* Заголовки разделов */
 .section-title {
   background: #e1ded9;
   padding: 10px 16px;
@@ -68,7 +74,9 @@ html, body {
   text-align: center;
 }
 
-/* Элемент блюда */
+/* =========================
+   Элементы чеклиста
+========================= */
 .dish {
   display: flex;
   justify-content: space-between;
@@ -78,14 +86,12 @@ html, body {
   font-size: 24px;
 }
 
-/* Метки */
 .check-label {
   flex: 1 1 60%;
   font-size: 24px;
   margin-bottom: 6px;
 }
 
-/* Селекторы */
 select,
 select.qty {
   flex: 1 1 35%;
@@ -104,7 +110,9 @@ select.qty option {
   text-align: center;
 }
 
-/* Селекторы даты */
+/* =========================
+   Дата и селекторы
+========================= */
 .date-group {
   display: flex;
   gap: 20px;
@@ -122,7 +130,9 @@ select.qty option {
   text-align-last: center;
 }
 
-/* Поля ввода */
+/* =========================
+   Ввод текста / комментариев
+========================= */
 input[type="text"],
 textarea {
   width: 100%;
@@ -139,7 +149,9 @@ textarea {
   min-height: 120px;
 }
 
-/* Кнопка отправки */
+/* =========================
+   Кнопка отправки
+========================= */
 .submit-block {
   margin-top: 40px;
 }
@@ -153,17 +165,20 @@ textarea {
   font-size: 28px;
   border-radius: 10px;
   cursor: pointer;
+  transition: background 0.2s ease-in-out;
 }
 
 .submit-block button:hover {
   background: #111;
 }
 
-/* Попап */
+/* =========================
+   Попап подтверждения
+========================= */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
