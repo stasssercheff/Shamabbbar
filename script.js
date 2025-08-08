@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const token = '8307377112:AAEb7d6w3tBypnqclQpJ5mBdSMG5SwoMWXc';
-    const chat_id = '-1002393080811';
+    const chat_id = '-4961000707';
     const messageRU = buildMessage('ru');
     const messageEN = buildMessage('en');
 
