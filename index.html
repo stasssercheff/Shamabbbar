@@ -1,100 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Checklist</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="checklist.js"></script>
+  <meta charset="UTF-8">
+  <title>Чеклист</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
 
-    <!-- Language Switch -->
+    <!-- Язык -->
     <div class="lang-switch">
       <button onclick="switchLanguage('ru')">Русский</button>
       <button onclick="switchLanguage('en')">English</button>
       <button onclick="switchLanguage('vi')">Tiếng Việt</button>
     </div>
 
-    <!-- Checklist type -->
-    <div class="form-group">
-      <label class="check-label" for="checklist-type" data-lang-ru="Выберите чеклист" data-lang-en="Select checklist" data-lang-vi="Chọn danh sách">Select checklist</label>
-      <select id="checklist-type" name="checklist-type">
-        <option value="">—</option>
-        <option value="barista">Barista</option>
-        <option value="waiter">Waiter</option>
-        <option value="cashier">Cashier</option>
-      </select>
-    </div>
+    <!-- Заголовок -->
+    <h1 class="title" data-ru="Чеклист сотрудника" data-en="Staff Checklist" data-vi="Danh sách nhân viên">Чеклист сотрудника</h1>
 
-    <!-- Name selection -->
-    <div class="form-group">
-      <label class="check-label" for="employee-name" data-lang-ru="Сотрудник" data-lang-en="Employee" data-lang-vi="Nhân viên">Employee</label>
-      <select id="employee-name" name="employee-name">
-        <option value="">—</option>
-        <option>Employee 1</option>
-        <option>Employee 2</option>
-        <option>Employee 3</option>
-      </select>
-    </div>
+    <!-- Форма -->
+    <form id="checklist-form">
 
-    <!-- Date -->
-    <div class="form-group">
-      <label class="check-label" for="checklist-date" data-lang-ru="Дата" data-lang-en="Date" data-lang-vi="Ngày">Date</label>
-      <input type="date" id="checklist-date" name="checklist-date" />
-    </div>
-
-    <!-- Checklists -->
-    <div id="checklist-sections">
-      <!-- Barista -->
-      <div class="checklist-section" data-type="barista">
-        <h2 class="section-title" data-lang-ru="Бариста" data-lang-en="Barista" data-lang-vi="Barista">Barista</h2>
-
-        <div class="form-group">
-          <label class="check-label" data-lang-ru="Молоко в холодильнике" data-lang-en="Milk in fridge" data-lang-vi="Sữa trong tủ lạnh">Milk in fridge</label>
-          <select class="qty">
-            <option value="">—</option>
-            <option data-lang-ru="Сделано" data-lang-en="Done" data-lang-vi="Hoàn tất">Done</option>
-            <option data-lang-ru="Не сделано" data-lang-en="Not done" data-lang-vi="Chưa làm">Not done</option>
-          </select>
-        </div>
-
-        <!-- Добавь сюда другие пункты бариста -->
+      <!-- Роль -->
+      <div class="input-block">
+        <label for="role" data-ru="Выберите роль" data-en="Select role" data-vi="Chọn vai trò">Выберите роль</label>
+        <select id="role" name="role">
+          <option value="">—</option>
+          <option value="barista">Бариста</option>
+          <option value="waiter">Официант</option>
+          <option value="cashier">Кассир</option>
+        </select>
       </div>
 
-      <!-- Waiter -->
-      <div class="checklist-section" data-type="waiter">
-        <h2 class="section-title" data-lang-ru="Официант" data-lang-en="Waiter" data-lang-vi="Phục vụ">Waiter</h2>
-
-        <div class="form-group">
-          <label class="check-label" data-lang-ru="Салфетки на столах" data-lang-en="Napkins on tables" data-lang-vi="Khăn giấy trên bàn">Napkins on tables</label>
-          <select class="qty">
-            <option value="">—</option>
-            <option data-lang-ru="Сделано" data-lang-en="Done" data-lang-vi="Hoàn tất">Done</option>
-            <option data-lang-ru="Не сделано" data-lang-en="Not done" data-lang-vi="Chưa làm">Not done</option>
-          </select>
-        </div>
+      <!-- Сотрудник -->
+      <div class="input-block">
+        <label for="name" data-ru="Сотрудник" data-en="Staff" data-vi="Nhân viên">Сотрудник</label>
+        <select id="name" name="name">
+          <option value="">—</option>
+          <option value="Сотрудник 1">Сотрудник 1</option>
+          <option value="Сотрудник 2">Сотрудник 2</option>
+          <option value="Сотрудник 3">Сотрудник 3</option>
+        </select>
       </div>
 
-      <!-- Cashier -->
-      <div class="checklist-section" data-type="cashier">
-        <h2 class="section-title" data-lang-ru="Кассир" data-lang-en="Cashier" data-lang-vi="Thu ngân">Cashier</h2>
-
-        <div class="form-group">
-          <label class="check-label" data-lang-ru="Касса проверена" data-lang-en="Cash register checked" data-lang-vi="Kiểm tra máy thu ngân">Cash register checked</label>
-          <select class="qty">
-            <option value="">—</option>
-            <option data-lang-ru="Сделано" data-lang-en="Done" data-lang-vi="Hoàn tất">Done</option>
-            <option data-lang-ru="Не сделано" data-lang-en="Not done" data-lang-vi="Chưa làm">Not done</option>
-          </select>
-        </div>
+      <!-- Дата -->
+      <div class="input-block">
+        <label for="date" data-ru="Дата" data-en="Date" data-vi="Ngày">Дата</label>
+        <input type="date" id="date" name="date">
       </div>
-    </div>
 
-    <!-- Submit button -->
-    <div class="form-group">
-      <button id="submit-button" type="button" data-lang-ru="Отправить" data-lang-en="Submit" data-lang-vi="Gửi">Submit</button>
-    </div>
+      <!-- Чеклист -->
+      <div id="checklist-area"></div>
+
+      <!-- Кнопка -->
+      <button type="submit" id="submit-button">Отправить</button>
+
+    </form>
   </div>
+
+  <script src="checklist.js"></script>
 </body>
 </html>
